@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "xun-fei.client.appId",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "xun-fei.client.apiSecret",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "xun-fei.client.apiKey",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "zhi-pu.client.apiKey",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "aliyun-oss.access-key-id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "aliyun-oss.access-key-secret",
+      "type": "java.lang.String"
+    }
+  ]
+}

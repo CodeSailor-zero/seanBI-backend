@@ -1,0 +1,91 @@
+# 公共配置文件
+spring:
+#  格式化时间
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: UTC
+  application:
+    name: springboot-init
+  # 默认 dev 环境
+  profiles:
+    active: dev
+  # 支持 swagger3
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # session 配置
+  session:
+    # store-type: redis
+    # 30 天过期
+    timeout: 2592000
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/seanbi
+    username: sean
+    password: 123456
+  # Redis 配置
+  redis:
+    database: 1
+    host: localhost
+    port: 6379
+    timeout: 5000
+    password: 123456
+  # 文件上传
+  servlet:
+    multipart:
+      # 大小限制
+      max-file-size: 10MB
+#rabbitmq 的配置
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+server:
+  address: 0.0.0.0
+  port: 8108
+  servlet:
+    context-path: /api
+    # cookie 30 天过期
+    session:
+      cookie:
+        max-age: 2592000
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值（默认为 1）
+      logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+# 对象存储
+aliyun-oss:
+  endpoint: https://oss-cn-nanjing.aliyuncs.com
+  access-key-id: LTAI5tQCHtSG2Y4smUBR4yz9
+  access-key-secret: 1VC0fiDZe3NUchy96PeqR5grMljvgg
+  bucketName: bi-upload-avatar-image
+# 接口文档配置
+knife4j:
+  enable: true
+  openapi:
+    title: "接口文档"
+    version: 1.0
+    group:
+      default:
+        api-rule: package
+        api-rule-resources:
+          - com.yupi.springbootinit.controller
+## 讯飞 AI 配置
+xun-fei:
+  client:
+    appId: 670a83a6
+    apiSecret: Y2EzMmM0ODlkYzdkYzY1ZDMzZGIxMjdl
+    apiKey: bafdd48e603d58b5b507bdc6d10c23f6
+# 智普AI 配置
+zhi-pu:
+  client:
+    apiKey: ef0f0a5d87074f3b94a924698c55ba84.JEOMC3VMMSpGJGR8
+
+
