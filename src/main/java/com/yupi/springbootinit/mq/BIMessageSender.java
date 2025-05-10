@@ -1,6 +1,5 @@
 package com.yupi.springbootinit.mq;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.yupi.springbootinit.common.ErrorCode;
 import com.yupi.springbootinit.constant.UserConstant;

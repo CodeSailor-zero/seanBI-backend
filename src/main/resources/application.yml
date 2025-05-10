@@ -42,6 +42,10 @@ spring:
     port: 5672
     username: guest
     password: guest
+    publisher-confirm-type: correlated # 生产者消息投递到交换机确认回调
+    listener:
+      simple:
+        acknowledge-mode: manual # 消费者手动确认
 server:
   address: 0.0.0.0
   port: 8108
@@ -63,9 +67,9 @@ mybatis-plus:
 # 对象存储
 aliyun-oss:
   endpoint: https://oss-cn-nanjing.aliyuncs.com
-  access-key-id: xxx
-  access-key-secret: xxx
-  bucketName: xxx
+  access-key-id: LTAI5tQCHtSG2Y4smUBR4yz9
+  access-key-secret: 1VC0fiDZe3NUchy96PeqR5grMljvgg
+  bucketName: bi-upload-avatar-image
 # 接口文档配置
 knife4j:
   enable: true
@@ -80,12 +84,12 @@ knife4j:
 ## 讯飞 AI 配置
 xun-fei:
   client:
-    appId: xxx
-    apiSecret: xxx
-    apiKey: xxx
+    appId: 670a83a6
+    apiSecret: Y2EzMmM0ODlkYzdkYzY1ZDMzZGIxMjdl
+    apiKey: bafdd48e603d58b5b507bdc6d10c23f6
 # 智普AI 配置
 zhi-pu:
   client:
-    apiKey: xxx
+    apiKey: ef0f0a5d87074f3b94a924698c55ba84.JEOMC3VMMSpGJGR8
 
 

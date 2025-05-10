@@ -35,21 +35,15 @@ public class BIVIPMessageConsumerA {
     private ChartService chartService;
 
     @Resource
-    private SparkAIManager sparkAiManager;
-
-    @Resource
     private AIManager aiManager;
 
-    //指定程序监听的队列和确认模式
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(BIConstant.BI_QUEUE_NAME),
-            exchange = @Exchange(value = BIConstant.BI_EXCHANGE_NAME),
-            key = BIConstant.BI_ROUTING_KEY
-    ),ackMode = "MANUAL")
+    //指定程序监听的队列和确认模式[手动确认]
+    @RabbitListener(queues = {BIConstant.BI_QUEUE_NAME})
     public void receiveMessage(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
         try {
             log.error("我已经接收到信息 A");
             if (StrUtil.isBlank(message)) {
+                //手动拒绝消息
                 channel.basicNack(deliveryTag, false, false);
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "消息为空");
             }
@@ -61,6 +55,7 @@ public class BIVIPMessageConsumerA {
             long chartId = seadMessageMQ.getId();
             Chart chart = chartService.getById(chartId);
             if (chart == null) {
+                // 手动拒绝消息
                 channel.basicNack(deliveryTag, false, false);
                 throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "图表不存在");
             }
@@ -70,7 +65,10 @@ public class BIVIPMessageConsumerA {
             updateChart.setStatus("running");
             boolean b = chartService.updateById(updateChart);
             if (!b) {
-                // todo 建议再次修改数据库，将状态修改为 failed 失败
+                // 修改数据库，将状态修改为 failed 失败
+                updateChart.setStatus("failed");
+                chartService.updateById(updateChart);
+                //手动拒绝消息
                 channel.basicNack(deliveryTag, false, false);
                 handleChartUpdate(chartId, "更新图表状态失败");
                 return;
@@ -92,14 +90,17 @@ public class BIVIPMessageConsumerA {
             b = chartService.updateById(updateChart);
             log.error("updateChart" + updateChart);
             if (!b) {
-                // todo 建议再次修改数据库，将状态修改为 failed 失败
+                // 再次修改数据库，将状态修改为 failed 失败
+                updateChart.setStatus("failed");
+                chartService.updateById(updateChart);
+                //手动拒绝确认消息，让信息路由到死信队列
                 channel.basicNack(deliveryTag, false, false);
                 handleChartUpdate(chartId, "更新图表状态失败");
                 return;
             }
-//            log.info("receive message：" + message);
             channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
+            channel.basicNack(deliveryTag, false, false);
             throw new RuntimeException(e);
         }
     }

@@ -41,12 +41,7 @@ public class BICommonMessageConsumer {
     private AIManager aiManager;
 
     //指定程序监听的队列和确认模式
-//    @RabbitListener(queues = {BIConstant.BI_COMMON_QUEUE_NAME}, ackMode = "MANUAL")
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(BIConstant.BI_COMMON_QUEUE_NAME),
-            exchange = @Exchange(value = BIConstant.BI_EXCHANGE_NAME),
-            key = BIConstant.BI_COMMON_ROUTING_KEY
-    ),ackMode = "MANUAL")
+    @RabbitListener(queues = {BIConstant.BI_COMMON_QUEUE_NAME})
     public void receiveMessage(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
         try {
             log.error("我已经接收到信息 普通用户");
@@ -69,7 +64,9 @@ public class BICommonMessageConsumer {
             updateChart.setStatus("running");
             boolean b = chartService.updateById(updateChart);
             if (!b) {
-                // todo 建议再次修改数据库，将状态修改为 failed 失败
+                // 修改数据库，将状态修改为 failed 失败
+                updateChart.setStatus("failed");
+                chartService.updateById(updateChart);
                 channel.basicNack(deliveryTag, false, false);
                 handleChartUpdate(chartId, "更新图表状态失败");
                 return;
@@ -89,16 +86,20 @@ public class BICommonMessageConsumer {
             updateChart.setGenChart(genChart);
             updateChart.setGenResult(genResult);
             b = chartService.updateById(updateChart);
-            log.error("updateChart" + updateChart);
             if (!b) {
-                // todo 建议再次修改数据库，将状态修改为 failed 失败
+                // 再次修改数据库，将状态修改为 failed 失败
+                updateChart.setStatus("failed");
+                chartService.updateById(updateChart);
+                //手动拒绝确认消息，让信息路由到死信队列
                 channel.basicNack(deliveryTag, false, false);
                 handleChartUpdate(chartId, "更新图表状态失败");
                 return;
             }
-//            log.info("receive message：" + message);
+            // 处理成功，确认消息
             channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
+            // 处理失败，拒绝消息
+            channel.basicNack(deliveryTag, false, false);
             throw new RuntimeException(e);
         }
     }
