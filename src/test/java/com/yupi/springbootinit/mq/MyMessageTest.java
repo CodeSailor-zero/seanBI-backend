@@ -1,6 +1,6 @@
-package com.yupi.springbootinit.mq;
+package com.sean.seanBI.mq;
 
-import com.yupi.springbootinit.mq.example.MyMessageSender;
+import com.sean.seanBI.mq.example.MyMessageSender;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

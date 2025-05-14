@@ -1,6 +1,6 @@
-package com.yupi.springbootinit.manager;
+package com.sean.seanBI.manager;
 
-import com.yupi.springbootinit.manager.AIManagers.SparkAIManager;
+import com.sean.seanBI.manager.AIManagers.SparkAIManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

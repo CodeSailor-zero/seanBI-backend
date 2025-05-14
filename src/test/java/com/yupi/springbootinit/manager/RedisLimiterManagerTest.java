@@ -1,11 +1,9 @@
-package com.yupi.springbootinit.manager;
+package com.sean.seanBI.manager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Sean

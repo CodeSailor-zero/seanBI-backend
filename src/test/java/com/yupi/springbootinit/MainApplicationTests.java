@@ -1,4 +1,4 @@
-package com.yupi.springbootinit;
+package com.sean.seanBI;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

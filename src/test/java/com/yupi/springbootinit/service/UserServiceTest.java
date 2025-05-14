@@ -1,4 +1,4 @@
-package com.yupi.springbootinit.service;
+package com.sean.seanBI.service;
 
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
